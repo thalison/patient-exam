@@ -289,7 +289,7 @@ Exclui um exame existente pelo seu ID.
 
 #### Exemplo
 
-```text id="n9x2vd"
+```text
 DELETE /exams/1
 ```
 
@@ -297,7 +297,7 @@ DELETE /exams/1
 
 **HTTP 200 OK**
 
-```json id="k3v7qa"
+```json
 {
   "message": "Exame excluído com sucesso"
 }
@@ -307,7 +307,7 @@ DELETE /exams/1
 
 **HTTP 404 Not Found**
 
-```json id="j6m1rx"
+```json
 {
   "message": "Exame não encontrado"
 }
