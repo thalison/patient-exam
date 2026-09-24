@@ -68,6 +68,7 @@ DB_USER=root
 DB_PASSWORD=
 DB_NAME=patient_exam
 DB_PORT=3306
+PORT=3000
 ```
 
 ### 4. Criar o banco de dados
@@ -88,7 +89,8 @@ CREATE TABLE exams (
     exam_name VARCHAR(150) NOT NULL,
     exam_date DATE NOT NULL,
     exam_time TIME NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (exam_date, exam_time)
 );
 ```
 
@@ -144,7 +146,7 @@ Cadastra um novo exame para um paciente.
 
 ```json
 {
-  "message": "Exame criado com sucesso",
+  "message": "Exame cadastrado com sucesso!",
   "id": 1
 }
 ```
@@ -227,6 +229,24 @@ GET /exams/1
 {
   "message": "Exame não encontrado"
 }
+```
+
+#### ID inválido
+
+Caso o ID informado não seja um número inteiro positivo:
+
+**HTTP 400 Bad Request**
+
+```json
+{
+  "message": "ID inválido"
+}
+```
+
+Exemplo:
+
+```text
+GET /exams/abc
 ```
 
 ### Atualizar um exame
@@ -332,6 +352,7 @@ Os endpoints foram testados utilizando o Postman, incluindo cenários de sucesso
 - Listagem de todos os exames
 - Busca de exame por ID existente
 - Busca de exame por ID inexistente
+- Busca de exame com ID inválido
 
 ### Testes de atualização
 
