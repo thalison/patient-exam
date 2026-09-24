@@ -182,7 +182,6 @@ const getExams = (req, res) => {
 
       return res.status(500).json({
         message: "Erro ao buscar os exames",
-        error: error.message,
       });
     }
 
@@ -203,7 +202,6 @@ const getExamById = (req, res) => {
 
       return res.status(500).json({
         message: "Erro ao buscar o exame",
-        error: error.message,
       });
     }
 
@@ -348,7 +346,6 @@ const deleteExam = (req, res) => {
 
       return res.status(500).json({
         message: "Erro ao excluir o exame",
-        error: error.message,
       });
     }
 
