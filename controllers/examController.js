@@ -94,12 +94,13 @@ const createExam = (req, res) => {
   }
 
   // Pegamos os dados já normalizados
-  const cleanPatientName = validationResult.patient_name;
-  const cleanPhone = validationResult.phone;
-  const cleanExamName = validationResult.exam_name;
-  const cleanExamDate = validationResult.exam_date;
-  const cleanExamTime = validationResult.exam_time;
-
+  const {
+    patient_name: cleanPatientName,
+    phone: cleanPhone,
+    exam_name: cleanExamName,
+    exam_date: cleanExamDate,
+    exam_time: cleanExamTime,
+  } = validationResult;
   // ========================================================
   // VERIFICAMOS SE O HORÁRIO JÁ ESTÁ OCUPADO
   // ========================================================
@@ -120,7 +121,6 @@ const createExam = (req, res) => {
 
       return res.status(500).json({
         message: "Erro ao verificar disponibilidade do horário",
-        error: error.message,
       });
     }
 
@@ -268,7 +268,6 @@ const updateExam = (req, res) => {
 
       return res.status(500).json({
         message: "Erro ao verificar disponibilidade do horário",
-        error: error.message,
       });
     }
 
@@ -307,9 +306,16 @@ const updateExam = (req, res) => {
       if (error) {
         console.error(error);
 
+        // Se o banco informar que houve duplicidade
+        if (error.code === "ER_DUP_ENTRY") {
+          return res.status(400).json({
+            message: "Horário já está ocupado",
+          });
+        }
+
+        // Para outros erros, não mostramos detalhes internos do banco
         return res.status(500).json({
-          message: "Erro ao atualizar o exame",
-          error: error.message,
+          message: "Erro interno ao atualizar o exame",
         });
       }
 
