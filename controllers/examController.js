@@ -1,5 +1,16 @@
 const db = require("../database/connection");
 
+// VALIDAÇÃO DO ID
+const validateId = (id) => {
+  const idNumber = Number(id);
+
+  if (!Number.isInteger(idNumber) || idNumber <= 0) {
+    return null;
+  }
+
+  return idNumber;
+};
+
 // FUNÇÃO DE VALIDAÇÃO DOS DADOS DO EXAME
 
 const validateExamData = ({
@@ -193,8 +204,16 @@ const getExams = (req, res) => {
 const getExamById = (req, res) => {
   const { id } = req.params;
 
+  const idNumber = validateId(id);
+
+  if (idNumber === null) {
+    return res.status(400).json({
+      message: "ID inválido",
+    });
+  }
+
   const sql = "SELECT * FROM exams WHERE id = ?";
-  const values = [id];
+  const values = [idNumber];
 
   db.query(sql, values, (error, results) => {
     if (error) {
@@ -218,6 +237,14 @@ const getExamById = (req, res) => {
 // UPDATE - ATUALIZAR EXAME
 const updateExam = (req, res) => {
   const { id } = req.params;
+
+  const idNumber = validateId(id);
+
+  if (idNumber === null) {
+    return res.status(400).json({
+      message: "ID inválido",
+    });
+  }
 
   const { patient_name, phone, exam_name, exam_date, exam_time } = req.body;
 
@@ -258,7 +285,7 @@ const updateExam = (req, res) => {
         AND id <> ?
     `;
 
-  const checkValues = [cleanExamDate, cleanExamTime, id];
+  const checkValues = [cleanExamDate, cleanExamTime, idNumber];
 
   db.query(checkSql, checkValues, (error, results) => {
     if (error) {
@@ -297,7 +324,7 @@ const updateExam = (req, res) => {
       cleanExamName,
       cleanExamDate,
       cleanExamTime,
-      id,
+      idNumber,
     ];
 
     db.query(sql, values, (error, result) => {
@@ -337,8 +364,16 @@ const updateExam = (req, res) => {
 const deleteExam = (req, res) => {
   const { id } = req.params;
 
+  const idNumber = validateId(id);
+
+  if (idNumber === null) {
+    return res.status(400).json({
+      message: "ID inválido",
+    });
+  }
+
   const sql = "DELETE FROM exams WHERE id = ?";
-  const values = [id];
+  const values = [idNumber];
 
   db.query(sql, values, (error, result) => {
     if (error) {
