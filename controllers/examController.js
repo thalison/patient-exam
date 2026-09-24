@@ -152,10 +152,15 @@ const createExam = (req, res) => {
     db.query(sql, values, (error, result) => {
       if (error) {
         console.error(error);
+        // Se o banco informar que houve duplicidade
+        if (error.code === "ER_DUP_ENTRY") {
+          return res.status(400).json({
+            message: "Horário já está ocupado",
+          });
+        }
 
         return res.status(500).json({
-          message: "Erro ao cadastrar o exame",
-          error: error.message,
+          message: "Erro interno ao cadastrar o exame",
         });
       }
 
